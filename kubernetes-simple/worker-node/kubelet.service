@@ -1,0 +1,32 @@
+[Unit]
+Description=Kubernetes Kubelet
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+After=docker.service
+Requires=docker.service
+
+[Service]
+WorkingDirectory=/var/lib/kubelet
+ExecStart={{BIN_PATH}/kubelet \
+  --address={{NODE_IP}} \
+  --hostname-override={{NODE_IP}} \
+  --pod-infra-container-image=mirrorgooglecontainers/pause-amd64:3.0 \
+  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \
+  --network-plugin=cni \
+  --cni-conf-dir=/etc/cni/net.d \
+  --cni-bin-dir={{BIN_PATH}} \
+  --cluster-dns=10.68.0.2 \
+  --cluster-domain=cluster.local. \
+  --allow-privileged=true \
+  --fail-swap-on=false \
+  --logtostderr=true \
+  --v=2
+#kubelet cAdvisor 默认在所有接口监听 4194 端口的请求, 以下iptables限制内网访问
+ExecStartPost=/sbin/iptables -A INPUT -s 10.0.0.0/8 -p tcp --dport 4194 -j ACCEPT
+ExecStartPost=/sbin/iptables -A INPUT -s 172.16.0.0/12 -p tcp --dport 4194 -j ACCEPT
+ExecStartPost=/sbin/iptables -A INPUT -s 192.168.0.0/16 -p tcp --dport 4194 -j ACCEPT
+ExecStartPost=/sbin/iptables -A INPUT -p tcp --dport 4194 -j DROP
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

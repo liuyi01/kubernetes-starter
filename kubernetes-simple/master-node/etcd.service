@@ -1,0 +1,21 @@
+[Unit]
+Description=Etcd Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+Documentation=https://github.com/coreos
+
+[Service]
+Type=notify
+WorkingDirectory=/var/lib/etcd/
+ExecStart=/home/michael/bin/etcd \
+  --name=server02 \
+  --listen-client-urls=http://{{NODE_IP}},http://127.0.0.1:2379 \
+  --advertise-client-urls=http://{{NODE_IP}}:2379 \
+  --data-dir=/var/lib/etcd
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
