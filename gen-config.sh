@@ -3,7 +3,7 @@
 target=$1
 
 if [ "$target" != "simple" -a "$target" != "with-ca" ];then
-    echo "Usage:\n\t sh gen-config.sh (simple / with-ca)"
+    echo -e "Usage:\n\t sh gen-config.sh (simple / with-ca)"
     exit 1
 fi
 
@@ -14,10 +14,14 @@ else
     folder = "kubernetes-with-ca"
 fi
 
-cd $folder
+target="${folder}-target"
+if [ -e $target ];then
+    rm -fr $target
+fi
+cp -r $folder $target
+cd $target
 
-keys=()
-idx=0
+declare -A kvs=()
 echo "====替换变量列表===="
 while read line;do  
     if [ "${line:0:1}" == "#" -o "${line:0:1}" == "" ];then
@@ -26,9 +30,8 @@ while read line;do
     eval $line
     key=${line/=*/}
     value=${line#*=}
-    keys[$idx]=$key
-    ((idx=$idx+1))
     echo "$key=$value"
+    kvs["$key"]="$value"
 done < $config_file
 echo "===================="
 
@@ -42,11 +45,12 @@ do
     for file in `ls $dir_or_file`
     do
         echo $file
-        for key in ${keys[@]}
+        for key in ${!kvs[@]}
         do
-            eval echo "\$$key"
-            echo "sed -i 's/{{$key}}/$value/g' $dir_or_file/$file"
-            #sed -i 's/{{$key}}/$value/g' $dir_or_file/$file
+            value=${kvs[$key]}
+            value=${value//\//\\\/}
+            echo "sed -i \"\" 's/{{$key}}/${value}/g' $dir_or_file/$file"
+            sed -i "" 's/{{$key}}/${value}/g' $dir_or_file/$file
         done
     done
 done

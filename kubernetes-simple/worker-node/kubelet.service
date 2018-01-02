@@ -6,7 +6,7 @@ Requires=docker.service
 
 [Service]
 WorkingDirectory=/var/lib/kubelet
-ExecStart={{BIN_PATH}/kubelet \
+ExecStart={{BIN_PATH}}/kubelet \
   --address={{NODE_IP}} \
   --hostname-override={{NODE_IP}} \
   --pod-infra-container-image=mirrorgooglecontainers/pause-amd64:3.0 \
