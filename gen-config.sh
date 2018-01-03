@@ -33,6 +33,7 @@ while read line;do
     echo "$key=$value"
     kvs["$key"]="$value"
 done < $config_file
+rm -f $config_file
 echo "===================="
 
 echo "====替换配置文件===="
@@ -49,9 +50,9 @@ do
         do
             value=${kvs[$key]}
             value=${value//\//\\\/}
-            echo "sed -i \"\" 's/{{$key}}/${value}/g' $dir_or_file/$file"
-            sed -i "" 's/{{$key}}/${value}/g' $dir_or_file/$file
+            sed -i "" "s/{{$key}}/${value}/g" $dir_or_file/$file
         done
     done
 done
-
+echo "================="
+echo "配置生成成功，位置: `pwd`"
