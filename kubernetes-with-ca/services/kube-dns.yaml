@@ -112,7 +112,6 @@ spec:
         - --domain=cluster.local.
         - --dns-port=10053
         - --config-dir=/kube-dns-config
-        - --kube-master-url=http://{{MASTER_IP}}:8080
         - --v=2
         env:
         - name: PROMETHEUS_PORT

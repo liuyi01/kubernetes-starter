@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: user-service
+  name: user-service
+  namespace: default
+spec:
+  ports:
+  - name: user-edge-service-port2
+    port: 8082
+    protocol: TCP
+    targetPort: 8082
+  - name: user-service-port
+    port: 7911
+    protocol: TCP
+    targetPort: 7911
+  selector:
+    app: user-service
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: user-service-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - name: user-service
+        image: {{HUB}}/micro-service/user-service:latest
+        ports:
+        - containerPort: 7911
+      - name: user-edge-service
+        image: {{HUB}}/micro-service/user-edge-service:latest
+        ports:
+        - containerPort: 8082
+
