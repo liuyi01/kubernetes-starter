@@ -10,7 +10,7 @@ function replace_files() {
         do
             value=${kvs[$key]}
             value=${value//\//\\\/}
-            sed -i "" "s/{{$key}}/${value}/g" $file
+            sed -i "s/{{$key}}/${value}/g" $file
         done
         return 0
     fi
