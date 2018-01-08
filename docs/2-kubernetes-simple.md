@@ -227,9 +227,13 @@ $ journalctl -f -u kubelet
 **kubelet.service**
 > [Unit]
 Description=Kubernetes Kubelet
+
 [Service]
+
 \#kubelet工作目录，存储当前节点容器，pod等信息
+
 WorkingDirectory=/var/lib/kubelet
+
 ExecStart=/home/michael/bin/kubelet \
   \#对外服务的监听地址
   --address=192.168.1.103 \
