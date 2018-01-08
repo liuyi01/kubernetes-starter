@@ -41,24 +41,24 @@ $ journalctl -f -u kube-apiserver
 ```
 
 #### 2.3 重点配置说明
-> [Unit]
-> Description=Kubernetes API Server
-> ...
-> [Service]
-> \#可执行文件的位置
-> ExecStart=/home/michael/bin/kube-apiserver \
-> --admission-
-> \#非安全端口(8080)绑定的监听地址 这里表示监听所有地址
-> --insecure-bind-address=0.0.0.0 \
-> \#不使用https
-> --kubelet-https=false \
-> \#kubernetes集群的虚拟ip的地址范围
-> --service-cluster-ip-range=10.68.0.0/16 \
-> \#service的nodeport的端口范围限制
->   --service-node-port-range=20000-40000 \
-> \#很多地方都需要和etcd打交道，也是唯一可以直接操作etcd的模块
->   --etcd-servers=http://192.168.1.102:2379 \
-> ...
+> [Unit]  
+> Description=Kubernetes API Server  
+> ...  
+> [Service]  
+> \#可执行文件的位置  
+> ExecStart=/home/michael/bin/kube-apiserver \\  
+> --admission-  
+> \#非安全端口(8080)绑定的监听地址 这里表示监听所有地址  
+> --insecure-bind-address=0.0.0.0 \\  
+> \#不使用https  
+> --kubelet-https=false \\  
+> \#kubernetes集群的虚拟ip的地址范围  
+> --service-cluster-ip-range=10.68.0.0/16 \\  
+> \#service的nodeport的端口范围限制  
+>   --service-node-port-range=20000-40000 \\  
+> \#很多地方都需要和etcd打交道，也是唯一可以直接操作etcd的模块  
+>   --etcd-servers=http://192.168.1.102:2379 \\  
+> ...  
 
 ## 3. 部署ControllerManager（主节点）
 #### 3.1 简介
@@ -232,18 +232,18 @@ Description=Kubernetes Kubelet
 WorkingDirectory=/var/lib/kubelet  
 ExecStart=/home/michael/bin/kubelet \\  
   \#对外服务的监听地址  
-  --address=192.168.1.103 \\
-  \#指定基础容器的镜像，负责创建Pod 内部共享的网络、文件系统等，这个基础容器非常重要：K8S每一个运行的 POD里面必然包含这个基础容器，如果它没有运行起来那么你的POD 肯定创建不了
-  --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/imooc/pause-amd64:3.0 \
-  \#访问集群方式的配置，如api-server地址等
-  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \
-  \#声明cni网络插件
-  --network-plugin=cni \
-  \#cni网络配置目录，kubelet会读取该目录下得网络配置
-  --cni-conf-dir=/etc/cni/net.d \
-  \#指定 kubedns 的 Service IP(可以先分配，后续创建 kubedns 服务时指定该 IP)，--cluster-domain 指定域名后缀，这两个参数同时指定后才会生效
- --cluster-dns=10.68.0.2 \
-  ...
+  --address=192.168.1.103 \\  
+  \#指定基础容器的镜像，负责创建Pod 内部共享的网络、文件系统等，这个基础容器非常重要：K8S每一个运行的 POD里面必然包含这个基础容器，如果它没有运行起来那么你的POD 肯定创建不了  
+  --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/imooc/pause-amd64:3.0 \\  
+  \#访问集群方式的配置，如api-server地址等  
+  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \\  
+  \#声明cni网络插件  
+  --network-plugin=cni \\  
+  \#cni网络配置目录，kubelet会读取该目录下得网络配置  
+  --cni-conf-dir=/etc/cni/net.d \\  
+  \#指定 kubedns 的 Service IP(可以先分配，后续创建 kubedns 服务时指定该 IP)，--cluster-domain 指定域名后缀，这两个参数同时指定后才会生效  
+ --cluster-dns=10.68.0.2 \\  
+  ...  
 
 **kubelet.kubeconfig**
 kubelet依赖的一个配置，格式看也是我们后面经常遇到的yaml格式，描述了kubelet访问apiserver的方式
