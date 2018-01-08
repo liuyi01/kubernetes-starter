@@ -226,24 +226,24 @@ $ journalctl -f -u kubelet
 #### 7.3 重点配置说明
 **kubelet.service**
 > [Unit]
-> Description=Kubernetes Kubelet
-> [Service]
-> \#kubelet工作目录，存储当前节点容器，pod等信息
-> WorkingDirectory=/var/lib/kubelet
-> ExecStart=/home/michael/bin/kubelet \
->   \#对外服务的监听地址
->   --address=192.168.1.103 \
->   \#每个pod运行都需要的容器镜像，负责管理pod的网络等资源
->   --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/imooc/pause-amd64:3.0 \
->   \#访问集群方式的配置，如api-server地址等
->   --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \
->   \#声明cni网络插件
->   --network-plugin=cni \
->   \#cni网络配置目录，kubelet会读取该目录下得网络配置
->   --cni-conf-dir=/etc/cni/net.d \
->   \#指定dns解析地址（暂时没有用到，后面配置kube-dns需要跟这个地址保持一致）
->  --cluster-dns=10.68.0.2 \
->   ...
+Description=Kubernetes Kubelet
+[Service]
+\#kubelet工作目录，存储当前节点容器，pod等信息
+WorkingDirectory=/var/lib/kubelet
+ExecStart=/home/michael/bin/kubelet \
+  \#对外服务的监听地址
+  --address=192.168.1.103 \
+  \#指定基础容器的镜像，负责创建Pod 内部共享的网络、文件系统等，这个基础容器非常重要：K8S每一个运行的 POD里面必然包含这个基础容器，如果它没有运行起来那么你的POD 肯定创建不了
+  --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/imooc/pause-amd64:3.0 \
+  \#访问集群方式的配置，如api-server地址等
+  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \
+  \#声明cni网络插件
+  --network-plugin=cni \
+  \#cni网络配置目录，kubelet会读取该目录下得网络配置
+  --cni-conf-dir=/etc/cni/net.d \
+  \#指定 kubedns 的 Service IP(可以先分配，后续创建 kubedns 服务时指定该 IP)，--cluster-domain 指定域名后缀，这两个参数同时指定后才会生效
+ --cluster-dns=10.68.0.2 \
+  ...
 
 **kubelet.kubeconfig**
 kubelet依赖的一个配置，格式看也是我们后面经常遇到的yaml格式，描述了kubelet访问apiserver的方式
@@ -282,6 +282,24 @@ calico作为kubernets的CNI插件的配置
 具体内容请看慕课网的视频吧：  [《微服务从开发到编排》][1]
 
 ## 9. 为集群增加service功能 - kube-proxy（工作节点）
+#### 9.1 简介
+每台工作节点上都应该运行一个kube-proxy服务，它监听API server中service和endpoint的变化情况，并通过iptables等来为服务配置负载均衡，是让我们的服务在集群外可以被访问到的重要方式。
+#### 9.2 部署
+**通过系统服务方式部署：**
+```bash
+#确保工作目录存在
+$ mkdir -p /var/lib/kube-proxy
+#复制kube-proxy服务配置文件
+$ cp target/worker-node/kube-proxy.service /lib/systemd/system/
+#复制kube-proxy依赖的配置文件
+$ cp target/worker-node/kube-proxy.kubeconfig /etc/kubernetes/
+
+$ systemctl enable kubelet.service
+$ service kubelet start
+$ journalctl -f -u kubelet
+```
+#### 9.3 重点配置说明
+
 
 ## 10. 为集群增加dns功能 - kube-dns（app）
 
