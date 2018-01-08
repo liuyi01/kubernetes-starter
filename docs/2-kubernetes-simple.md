@@ -225,18 +225,14 @@ $ journalctl -f -u kubelet
 ```
 #### 7.3 重点配置说明
 **kubelet.service**
-> [Unit]
-Description=Kubernetes Kubelet
-
-[Service]
-
-\#kubelet工作目录，存储当前节点容器，pod等信息
-
-WorkingDirectory=/var/lib/kubelet
-
-ExecStart=/home/michael/bin/kubelet \
-  \#对外服务的监听地址
-  --address=192.168.1.103 \
+> [Unit]  
+Description=Kubernetes Kubelet  
+[Service]  
+\#kubelet工作目录，存储当前节点容器，pod等信息  
+WorkingDirectory=/var/lib/kubelet  
+ExecStart=/home/michael/bin/kubelet \\  
+  \#对外服务的监听地址  
+  --address=192.168.1.103 \\
   \#指定基础容器的镜像，负责创建Pod 内部共享的网络、文件系统等，这个基础容器非常重要：K8S每一个运行的 POD里面必然包含这个基础容器，如果它没有运行起来那么你的POD 肯定创建不了
   --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/imooc/pause-amd64:3.0 \
   \#访问集群方式的配置，如api-server地址等
