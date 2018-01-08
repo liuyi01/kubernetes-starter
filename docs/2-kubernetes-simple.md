@@ -76,23 +76,23 @@ $ service kube-controller-manager start
 $ journalctl -f -u kube-controller-manager
 ```
 #### 3.3 重点配置说明
-> [Unit]
-> Description=Kubernetes Controller Manager
-> ...
-> [Service]
-> ExecStart=/home/michael/bin/kube-controller-manager \
-> \#对外服务的监听地址，这里表示只有本机的程序可以访问它
->   --address=127.0.0.1 \
->   \#apiserver的url
->   --master=http://127.0.0.1:8080 \
->   \#服务虚拟ip范围，同apiserver的配置
->  --service-cluster-ip-range=10.68.0.0/16 \
->  \#pod的ip地址范围
->  --cluster-cidr=172.20.0.0/16 \
->  \#下面两个表示不使用证书，用空值覆盖默认值
->  --cluster-signing-cert-file= \
->  --cluster-signing-key-file= \
-> ...
+> [Unit]  
+> Description=Kubernetes Controller Manager  
+> ...  
+> [Service]  
+> ExecStart=/home/michael/bin/kube-controller-manager \\  
+> \#对外服务的监听地址，这里表示只有本机的程序可以访问它  
+>   --address=127.0.0.1 \\  
+>   \#apiserver的url  
+>   --master=http://127.0.0.1:8080 \\  
+>   \#服务虚拟ip范围，同apiserver的配置  
+>  --service-cluster-ip-range=10.68.0.0/16 \\  
+>  \#pod的ip地址范围  
+>  --cluster-cidr=172.20.0.0/16 \\  
+>  \#下面两个表示不使用证书，用空值覆盖默认值  
+>  --cluster-signing-cert-file= \\  
+>  --cluster-signing-key-file= \\  
+> ...  
 
 ## 4. 部署Scheduler（主节点）
 #### 4.1 简介
@@ -108,16 +108,16 @@ $ journalctl -f -u kube-scheduler
 ```
 
 #### 4.3 重点配置说明
-> [Unit]
-> Description=Kubernetes Scheduler
-> ...
-> [Service]
-> ExecStart=/home/michael/bin/kube-scheduler \
->  \#对外服务的监听地址，这里表示只有本机的程序可以访问它
->   --address=127.0.0.1 \
->   \#apiserver的url
->   --master=http://127.0.0.1:8080 \
-> ...
+> [Unit]  
+> Description=Kubernetes Scheduler  
+> ...  
+> [Service]  
+> ExecStart=/home/michael/bin/kube-scheduler \\  
+>  \#对外服务的监听地址，这里表示只有本机的程序可以访问它  
+>   --address=127.0.0.1 \\  
+>   \#apiserver的url  
+>   --master=http://127.0.0.1:8080 \\  
+> ...  
 
 ## 5. 部署CalicoNode（所有节点）
 #### 5.1 简介
@@ -167,18 +167,18 @@ $ calicoctl get ipPool -o yaml
     nat-outgoing: true
 ```
 #### 5.4 重点配置说明
-> [Unit]
-> Description=calico node
-> ...
-> [Service]
-> \#以docker方式运行
-> ExecStart=/usr/bin/docker run --net=host --privileged --name=calico-node \
-> \#指定etcd endpoints（这里主要负责网络元数据一致性，确保Calico网络状态的准确性）
->   -e ETCD_ENDPOINTS=http://192.168.1.102:2379 \
-> \#网络地址范围（同上面ControllerManager）
->   -e CALICO_IPV4POOL_CIDR=172.20.0.0/16 \
-> \#镜像名，为了加快大家的下载速度，镜像都放到了阿里云上
->   registry.cn-hangzhou.aliyuncs.com/imooc/calico-node:v2.6.2
+> [Unit]  
+> Description=calico node  
+> ...  
+> [Service]  
+> \#以docker方式运行  
+> ExecStart=/usr/bin/docker run --net=host --privileged --name=calico-node \\  
+> \#指定etcd endpoints（这里主要负责网络元数据一致性，确保Calico网络状态的准确性）  
+>   -e ETCD_ENDPOINTS=http://192.168.1.102:2379 \\  
+> \#网络地址范围（同上面ControllerManager）  
+>   -e CALICO_IPV4POOL_CIDR=172.20.0.0/16 \\  
+> \#镜像名，为了加快大家的下载速度，镜像都放到了阿里云上  
+>   registry.cn-hangzhou.aliyuncs.com/imooc/calico-node:v2.6.2  
 
 ## 6. 配置kubectl命令（任意节点）
 #### 6.1 简介
@@ -247,32 +247,32 @@ ExecStart=/home/michael/bin/kubelet \\
 
 **kubelet.kubeconfig**
 kubelet依赖的一个配置，格式看也是我们后面经常遇到的yaml格式，描述了kubelet访问apiserver的方式
-> apiVersion: v1
-> clusters:
-> \- cluster:
-> \#跳过tls，即是kubernetes的认证
->     insecure-skip-tls-verify: true
->   \#api-server地址
->     server: http://192.168.1.102:8080
-> ...
+> apiVersion: v1  
+> clusters:  
+> \- cluster:  
+> \#跳过tls，即是kubernetes的认证  
+>     insecure-skip-tls-verify: true  
+>   \#api-server地址  
+>     server: http://192.168.1.102:8080  
+> ...  
 
 **10-calico.conf**
 calico作为kubernets的CNI插件的配置
-> {
->     "name": "calico-k8s-network",
->     "cniVersion": "0.1.0",
->     "type": "calico",
->     \#etcd的url
->     "etcd_endpoints": "http://192.168.1.102:2379",
->     "log_level": "info",
->     "ipam": {
->         "type": "calico-ipam"
->     },
->     "kubernetes": {
->     \#api-server的url
->         "k8s_api_root": "http://192.168.1.102:8080"
->     }
-> }
+> {  
+>     "name": "calico-k8s-network",  
+>     "cniVersion": "0.1.0",  
+>     "type": "calico",  
+>     \#etcd的url  
+>     "etcd_endpoints": "http://192.168.1.102:2379",  
+>     "log_level": "info",  
+>     "ipam": {  
+>         "type": "calico-ipam"  
+>     },  
+>     "kubernetes": {  
+>     \#api-server的url  
+>         "k8s_api_root": "http://192.168.1.102:8080"  
+>     }  
+> }  
 
 -----
 
