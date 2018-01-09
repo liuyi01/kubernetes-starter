@@ -4,7 +4,7 @@ Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 After=network.target
 [Service]
 ExecStart={{BIN_PATH}}/kube-apiserver \
-  --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota,NodeRestriction \
+  --admission-control=NamespaceLifecycle,LimitRanger,DefaultStorageClass,ResourceQuota,NodeRestriction \
   --insecure-bind-address=0.0.0.0 \
   --kubelet-https=false \
   --service-cluster-ip-range=10.68.0.0/16 \
