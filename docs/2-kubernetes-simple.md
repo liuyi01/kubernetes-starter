@@ -1,12 +1,11 @@
 # 二、基础集群部署 - kubernetes-simple
 ## 1. 部署ETCD（主节点）
 #### 1.1 简介
-kubernetes需要存储很多东西，像它本身的节点信息，组件信息，还有通过kubernetes运行的pod，deployment，service等等。都需要持久化。etcd就是它的数据中心。生产环境中为了保证数据中心的高可用和数据的一致性，一般会部署最少三个节点。我们这里以学习为主就只在主节点部署一个实例。
+&emsp;&emsp;kubernetes需要存储很多东西，像它本身的节点信息，组件信息，还有通过kubernetes运行的pod，deployment，service等等。都需要持久化。etcd就是它的数据中心。生产环境中为了保证数据中心的高可用和数据的一致性，一般会部署最少三个节点。我们这里以学习为主就只在主节点部署一个实例。
 > 如果你的环境已经有了etcd服务(不管是单点还是集群)，可以忽略这一步。前提是你在生成配置的时候填写了自己的etcd endpoint哦~
 
 #### 1.2 部署
 **etcd的二进制文件和服务的配置我们都已经准备好，现在的目的就是把它做成系统服务并启动。**
-
 
 ```bash
 #cd到git项目主目录
@@ -245,7 +244,7 @@ ExecStart=/home/michael/bin/kubelet \\
  --cluster-dns=10.68.0.2 \\  
   ...  
 
-**kubelet.kubeconfig**
+**kubelet.kubeconfig**  
 kubelet依赖的一个配置，格式看也是我们后面经常遇到的yaml格式，描述了kubelet访问apiserver的方式
 > apiVersion: v1  
 > clusters:  
@@ -256,25 +255,26 @@ kubelet依赖的一个配置，格式看也是我们后面经常遇到的yaml格
 >     server: http://192.168.1.102:8080  
 > ...  
 
-**10-calico.conf**
+**10-calico.conf**  
 calico作为kubernets的CNI插件的配置
-> {  
->     "name": "calico-k8s-network",  
->     "cniVersion": "0.1.0",  
->     "type": "calico",  
->     \#etcd的url  
->     "etcd_endpoints": "http://192.168.1.102:2379",  
->     "log_level": "info",  
->     "ipam": {  
->         "type": "calico-ipam"  
->     },  
->     "kubernetes": {  
->     \#api-server的url  
->         "k8s_api_root": "http://192.168.1.102:8080"  
->     }  
-> }  
+```xml
+{  
+  "name": "calico-k8s-network",  
+  "cniVersion": "0.1.0",  
+  "type": "calico",  
+    <!--etcd的url-->
+    "ed_endpoints": "http://192.168.1.102:2379",  
+    "logevel": "info",  
+    "ipam": {  
+        "type": "calico-ipam"  
+   },  
+    "kubernetes": {  
+        <!--api-server的url-->
+        "k8s_api_root": "http://192.168.1.102:8080"  
+    }  
+}  
+```
 
------
 
 ## 8. 小试牛刀
 到这里最基础的kubernetes集群就可以工作了。下面我们就来试试看怎么去操作，控制它。
@@ -294,14 +294,48 @@ $ cp target/worker-node/kube-proxy.service /lib/systemd/system/
 #复制kube-proxy依赖的配置文件
 $ cp target/worker-node/kube-proxy.kubeconfig /etc/kubernetes/
 
-$ systemctl enable kubelet.service
-$ service kubelet start
-$ journalctl -f -u kubelet
+$ systemctl enable kube-proxy.service
+$ service kube-proxy start
+$ journalctl -f -u kube-proxy
 ```
 #### 9.3 重点配置说明
+**kube-proxy.service**
+> [Unit]  
+Description=Kubernetes Kube-Proxy Serv`er  
+...  
+[Service]  
+\#工作目录  
+WorkingDirectory=/var/lib/kube-proxy  
+ExecStart=/home/michael/bin/kube-proxy \\  
+\#监听地址  
+  --bind-address=192.168.1.103 \\  
+  \#依赖的配置文件，描述了kube-proxy如何访问api-server  
+  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig \\  
+...
+
+**kube-proxy.kubeconfig**
+配置了kube-proxy如何访问api-server，内容与kubelet雷同，不再赘述。
+
+#### 9.4 操练service
+刚才我们在基础集群上演示了pod，deployments。下面就在刚才的基础上增加点service元素。具体内容见[视频教程][1]。
 
 
 ## 10. 为集群增加dns功能 - kube-dns（app）
+#### 10.1 简介
+kube-dns为Kubernetes集群提供命名服务，主要用来解析集群服务名和Pod的hostname。目的是让pod可以通过名字访问到集群内服务。它通过添加A记录的方式实现名字和service的解析。普通的service会解析到service-ip。headless service会解析到pod列表。
+#### 10.2 部署
+**通过kubernetes应用的方式部署**
+kube-dns.yaml文件基本与官方一致（除了镜像名不同外）。
+里面配置了多个组件，之间使用”---“分隔
+```bash
+#到kube-cfgs目录执行命令
+$ kubectl create -f target/services/kube-dns.yaml
+```
+#### 10.3 重点配置说明
+请直接参考配置文件中的注释。
 
+#### 10.4 通过dns访问服务
+这了主要演示增加kube-dns后，通过名字访问服务的原理和具体过程。演示启动dns服务和未启动dns服务的通过名字访问情况差别。
+具体内容请看[视频教程][1]吧~
 
 [1]: https://www.视频制作中敬请期待.com

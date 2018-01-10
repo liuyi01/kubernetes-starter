@@ -1,4 +1,5 @@
 ---
+#ConfigMap是我们见到的一个新类型，顾名思义是做配置管理的，这里用作kube-dns配置存储
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,6 +9,7 @@ metadata:
     addonmanager.kubernetes.io/mode: EnsureExists
 
 ---
+#认证授权使用，这里未用到
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -17,6 +19,7 @@ metadata:
     addonmanager.kubernetes.io/mode: Reconcile
 
 ---
+#dns服务
 apiVersion: v1
 kind: Service
 metadata:
@@ -28,7 +31,9 @@ metadata:
     kubernetes.io/name: "KubeDNS"
 spec:
   selector:
+    #选择器，一个服务包含了哪些pods
     k8s-app: kube-dns
+  #服务的clusterip，需要跟kubelet保持一致
   clusterIP: 10.68.0.2
   ports:
   - name: dns
@@ -39,6 +44,7 @@ spec:
     protocol: TCP
 
 ---
+#具体的pod定义，包含了三个容器
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -71,8 +77,9 @@ spec:
           name: kube-dns
           optional: true
       containers:
+      #实现dns解析功能
       - name: kubedns
-        image: mirrorgooglecontainers/k8s-dns-kube-dns-amd64:1.14.5
+        image: registry.cn-hangzhou.aliyuncs.com/imooc/k8s-dns-kube-dns-amd64:1.14.5
         resources:
           # TODO: Set memory limits when we've profiled the container for large
           # clusters, then set request = limit to keep this container in
@@ -105,6 +112,7 @@ spec:
         - --domain=cluster.local.
         - --dns-port=10053
         - --config-dir=/kube-dns-config
+        #访问kube-apiserver的地址
         - --kube-master-url=http://{{MASTER_IP}}:8080
         - --v=2
         env:
@@ -123,8 +131,9 @@ spec:
         volumeMounts:
         - name: kube-dns-config
           mountPath: /kube-dns-config
+      #dnsmasq类似一个dns缓存，用于提高访问效率
       - name: dnsmasq
-        image: mirrorgooglecontainers/k8s-dns-dnsmasq-nanny-amd64:1.14.5
+        image: registry.cn-hangzhou.aliyuncs.com/imooc/k8s-dns-dnsmasq-nanny-amd64:1.14.5
         livenessProbe:
           httpGet:
             path: /healthcheck/dnsmasq
@@ -161,8 +170,9 @@ spec:
         volumeMounts:
         - name: kube-dns-config
           mountPath: /etc/k8s/dns/dnsmasq-nanny
+      #sidecar是一个监控功能，负责监控另外两个容器的运行
       - name: sidecar
-        image: mirrorgooglecontainers/k8s-dns-sidecar-amd64:1.14.5
+        image: registry.cn-hangzhou.aliyuncs.com/imooc/k8s-dns-sidecar-amd64:1.14.5
         livenessProbe:
           httpGet:
             path: /metrics
