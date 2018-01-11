@@ -2,26 +2,25 @@
 Description=Kubernetes API Server
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 After=network.target
-
 [Service]
 ExecStart={{BIN_PATH}}/kube-apiserver \
   --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota,NodeRestriction \
-  --bind-address={{NODE_IP}} \
   --insecure-bind-address=127.0.0.1 \
-  --authorization-mode=Node,RBAC \
   --kubelet-https=true \
+  --bind-address={{NODE_IP}} \
+  --authorization-mode=Node,RBAC \
   --runtime-config=rbac.authorization.k8s.io/v1 \
-  --service-cluster-ip-range=10.68.0.0/16 \
-  --service-node-port-range=20000-40000 \
   --enable-bootstrap-token-auth \
   --token-auth-file=/etc/kubernetes/ca/kubernetes/token.csv \
   --tls-cert-file=/etc/kubernetes/ca/kubernetes/kubernetes.pem \
   --tls-private-key-file=/etc/kubernetes/ca/kubernetes/kubernetes-key.pem \
   --client-ca-file=/etc/kubernetes/ca/ca.pem \
-  --service-account-key-file=/etc/kubernetes/ca/ca-key.pem \
+  --service-account-key-file=/etc/kubernetes/ca/kubernetes/kubernetes-key.pem \
   --etcd-cafile=/etc/kubernetes/ca/ca.pem \
   --etcd-certfile=/etc/kubernetes/ca/kubernetes/kubernetes.pem \
   --etcd-keyfile=/etc/kubernetes/ca/kubernetes/kubernetes-key.pem \
+  --service-cluster-ip-range=10.68.0.0/16 \
+  --service-node-port-range=20000-40000 \
   --etcd-servers={{ETCD_ENDPOINTS}} \
   --enable-swagger-ui=true \
   --allow-privileged=true \
@@ -35,6 +34,5 @@ Restart=on-failure
 RestartSec=5
 Type=notify
 LimitNOFILE=65536
-
 [Install]
 WantedBy=multi-user.target
