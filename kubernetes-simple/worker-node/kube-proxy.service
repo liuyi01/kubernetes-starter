@@ -2,7 +2,6 @@
 Description=Kubernetes Kube-Proxy Server
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 After=network.target
-#kube-proxy.service
 [Service]
 WorkingDirectory=/var/lib/kube-proxy
 ExecStart={{BIN_PATH}}/kube-proxy \
