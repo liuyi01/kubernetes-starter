@@ -453,6 +453,9 @@ $ vimdiff kubernetes-simple/worker-node/kube-proxy.service kubernetes-with-ca/wo
 $ cp ~/kube-cfgs/target/worker-node/kube-proxy.service /lib/systemd/system/
 $ systemctl daemon-reload
 
+#安装依赖软件
+$ apt install conntrack
+
 #启动服务
 $ service kube-proxy start
 #查看日志
@@ -477,14 +480,20 @@ $ vimdiff kubernetes-simple/services/kube-dns.yaml kubernetes-with-ca/services/k
 #### 12.2 创建kube-dns
 ```bash
 $ kubectl create -f ~/kube-cfgs/target/services/kube-dns.yaml
+#看看启动是否成功
+$ kubectl -n kube-system get pods
 ```
 
 ## 13. 再试牛刀
+终于，安全版的kubernetes集群我们部署完成了。  
+下面我们使用新集群先温习一下之前学习过的命令，然后再认识一些新的命令，新的参数，新的功能。同样，具体内容请看[视频教程][3]吧~
+
+
 
 
 
 
 [1]: https://www.zhihu.com/question/33645891/answer/57721969
 [2]: http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html
-
+[3]: https://www.视频制作中敬请期待.com
 
