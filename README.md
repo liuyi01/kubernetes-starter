@@ -22,8 +22,8 @@
 
 
 
-  [1]: https://github.com/liuyi01/kube-cfgs/tree/master/docs/1-pre.md
-  [2]: https://github.com/liuyi01/kube-cfgs/tree/master/docs/2-kubernetes-simple.md
-  [3]: https://github.com/liuyi01/kube-cfgs/tree/master/docs/3-kubernetes-with-ca.md
-  [4]: https://github.com/liuyi01/kube-cfgs/tree/master/docs/4-microservice-deploy.md
-  [5]: https://github.com/liuyi01/kube-cfgs/tree/master/docs/5-import-func.md
+  [1]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/1-pre.md
+  [2]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/2-kubernetes-simple.md
+  [3]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/3-kubernetes-with-ca.md
+  [4]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/4-microservice-deploy.md
+  [5]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/5-import-func.md
