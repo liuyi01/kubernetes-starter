@@ -68,8 +68,9 @@ $ service docker start
 ## 3. 系统设置（所有节点）
 #### 3.1 关闭、禁用防火墙(让所有机器之间都可以通过任意端口建立连接)
 ```bash
-$ systemctl stop firewalld
-$ systemctl disable firewalld
+$ ufw disable
+#查看状态
+$ ufw status
 ```
 #### 3.2 设置系统参数 - 允许路由转发，不对bridge的数据进行处理
 ```bash
