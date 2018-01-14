@@ -13,7 +13,6 @@
 ## [二、基础集群部署 - kubernetes-simple][2]
 ## [三、完整集群部署 - kubernetes-with-ca][3]
 ## [四、在kubernetes上部署我们的微服务][4]
-## [五、kubernetes重点功能实践][5]
 
 
 
@@ -26,4 +25,3 @@
   [2]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/2-kubernetes-simple.md
   [3]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/3-kubernetes-with-ca.md
   [4]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/4-microservice-deploy.md
-  [5]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/5-import-func.md
