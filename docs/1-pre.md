@@ -113,10 +113,11 @@ kubernetes的安装有几种方式，不管是kube-admin还是社区贡献的部
 上一步我们下载了kubernetes各个组件的二进制文件，这些可执行文件的运行也是需要添加很多参数的，包括有的还会依赖一些配置文件。现在我们就把运行它们需要的参数和配置文件都准备好。
 #### 5.1 下载配置文件
 ```bash
-$ cd anywhere-you-like
-$ git clone https://github.com/liuyi01/kube-cfgs.git
+#到home目录下载项目
+$ cd
+$ git clone https://github.com/liuyi01/kubernetes-starter.git
 #看看git内容
-$ cd kube-cfgs && ls
+$ cd ~/kubernetes-starter && ls
 gen-config.sh
 kubernetes-simple/
 kubernetes-with-ca/
@@ -142,7 +143,7 @@ service-config/
 在每个节点上都生成一遍，把所有配置都生成好，后面会根据节点类型去使用相关的配置。
 ```bash
 #cd到之前下载的git代码目录
-$ cd kube-cfgs
+$ cd ~/kubernetes-starter
 #编辑属性配置（根据文件注释中的说明填写好每个key-value）
 $ vi kubernetes-simple/config.properties
 #生成配置文件，确保执行过程没有异常信息
