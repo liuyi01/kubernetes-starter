@@ -32,10 +32,8 @@ fi
 
 if [ "$target" == "simple" ];then
     folder="kubernetes-simple"
-    config_file=config.properties
 else
     folder="kubernetes-with-ca"
-    config_file=config.properties
 fi
 
 target="target"
@@ -52,8 +50,7 @@ while read line;do
     value=${line#*=}
     echo "$key=$value"
     kvs["$key"]="$value"
-done < $config_file
-rm -f $config_file
+done < ../config.properties
 echo "===================="
 
 echo "====替换配置文件===="

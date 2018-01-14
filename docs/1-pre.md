@@ -119,10 +119,6 @@ $ cd
 $ git clone https://github.com/liuyi01/kubernetes-starter.git
 #看看git内容
 $ cd ~/kubernetes-starter && ls
-gen-config.sh
-kubernetes-simple/
-kubernetes-with-ca/
-service-config/
 ```
 #### 5.2 文件说明
 - **gen-config.sh**
@@ -146,7 +142,7 @@ service-config/
 #cd到之前下载的git代码目录
 $ cd ~/kubernetes-starter
 #编辑属性配置（根据文件注释中的说明填写好每个key-value）
-$ vi kubernetes-simple/config.properties
+$ vi config.properties
 #生成配置文件，确保执行过程没有异常信息
 $ ./gen-config.sh simple
 #查看生成的配置文件，确保脚本执行成功
