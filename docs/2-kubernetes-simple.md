@@ -8,10 +8,8 @@
 **etcd的二进制文件和服务的配置我们都已经准备好，现在的目的就是把它做成系统服务并启动。**
 
 ```bash
-#cd到git项目主目录
-$ cd kube-cfg
 #把服务配置文件copy到系统服务目录
-$ cp target/master-node/etcd.service /lib/systemd/system/
+$ cp ~/kubernetes-starter/target/master-node/etcd.service /lib/systemd/system/
 #enable服务
 $ systemctl enable etcd.service
 #创建工作目录(保存数据的地方)
