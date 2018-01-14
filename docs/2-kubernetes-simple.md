@@ -46,7 +46,6 @@ $ journalctl -f -u kube-apiserver
 > [Service]  
 > \#可执行文件的位置  
 > ExecStart=/home/michael/bin/kube-apiserver \\  
-> --admission-  
 > \#非安全端口(8080)绑定的监听地址 这里表示监听所有地址  
 > --insecure-bind-address=0.0.0.0 \\  
 > \#不使用https  
@@ -301,7 +300,7 @@ $ journalctl -f -u kube-proxy
 #### 9.3 重点配置说明
 **kube-proxy.service**
 > [Unit]  
-Description=Kubernetes Kube-Proxy Serv`er  
+Description=Kubernetes Kube-Proxy Server
 ...  
 [Service]  
 \#工作目录  
