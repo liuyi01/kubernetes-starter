@@ -1,25 +1,4 @@
 # 三、完整集群部署 - kubernetes-with-ca
-开始之前我们要先把基础版本的集群停掉，包括service，deployments，pods以及运行的所有kubernetes组件
-```bash
-#删除services
-$ kubectl delete services nginx-service
-
-#删除deployments
-$ kubectl delete deploy kubernetes-bootcamp
-$ kubectl delete deploy nginx-deployment
-
-#停掉worker节点的服务
-$ service kubelet stop && rm -fr /var/lib/kubelet/*
-$ service kube-proxy stop && rm -fr /var/lib/kube-proxy/*
-$ service kube-calico stop
-
-#停掉master节点的服务
-$ service kube-calico stop
-$ service kube-scheduler stop
-$ service kube-controller-manager stop
-$ service kube-apiserver stop
-$ service etcd stop && rm -fr /var/lib/etcd/*
-```
 ## 1. 理解认证授权
 #### 1.1 为什么要认证
 想理解认证，我们得从认证解决什么问题、防止什么问题的发生入手。  
@@ -65,7 +44,29 @@ Admission controller - 准入控制本质上为一段准入代码，在对kubern
 - NamespaceExists：它会观察所有的请求，如果请求尝试创建一个不存在的namespace，则这个请求被拒绝。
 
 ## 3. 环境准备
-#### 3.1 生成配置（所有节点）
+#### 3.1 停止原有kubernetes相关服务
+开始之前我们要先把基础版本的集群停掉，包括service，deployments，pods以及运行的所有kubernetes组件
+```bash
+#删除services
+$ kubectl delete services nginx-service
+
+#删除deployments
+$ kubectl delete deploy kubernetes-bootcamp
+$ kubectl delete deploy nginx-deployment
+
+#停掉worker节点的服务
+$ service kubelet stop && rm -fr /var/lib/kubelet/*
+$ service kube-proxy stop && rm -fr /var/lib/kube-proxy/*
+$ service kube-calico stop
+
+#停掉master节点的服务
+$ service kube-calico stop
+$ service kube-scheduler stop
+$ service kube-controller-manager stop
+$ service kube-apiserver stop
+$ service etcd stop && rm -fr /var/lib/etcd/*
+```
+#### 3.2 生成配置（所有节点）
 跟基础环境搭建一样，我们需要生成kubernetes-with-ca的所有相关配置文件
 ```bash
 $ cd ~/kubernetes-starter
@@ -74,7 +75,7 @@ $ vi kubernetes-with-ca/config.properties
 #生成配置
 $ ./gen-config.sh with-ca
 ```
-#### 3.2 安装cfssl（所有节点）
+#### 3.3 安装cfssl（所有节点）
 cfssl是非常好用的CA工具，我们用它来生成证书和秘钥文件  
 安装过程比较简单，如下：
 ```bash
@@ -90,7 +91,7 @@ $ mv cfssljson_linux-amd64 /usr/local/bin/cfssljson
 #验证
 $ cfssl version
 ```
-#### 3.3 生成根证书（主节点）
+#### 3.4 生成根证书（主节点）
 根证书是证书信任链的根，各个组件通讯的前提是有一份大家都信任的证书（根证书），每个人使用的证书都是由这个根证书签发的。
 ```bash
 #所有证书相关的东西都放在这
