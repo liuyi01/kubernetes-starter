@@ -68,7 +68,7 @@ $ service etcd stop && rm -fr /var/lib/etcd/*
 ```bash
 $ cd ~/kubernetes-starter
 #按照配置文件的提示编辑好配置
-$ vi kubernetes-with-ca/config.properties
+$ vi config.properties
 #生成配置
 $ ./gen-config.sh with-ca
 ```
@@ -115,7 +115,11 @@ $ mkdir -p /etc/kubernetes/ca/etcd
 $ cp ~/kubernetes-starter/target/ca/etcd/etcd-csr.json /etc/kubernetes/ca/etcd/
 $ cd /etc/kubernetes/ca/etcd/
 #使用根证书(ca.pem)签发etcd证书
-$ cfssl gencert  -ca=../ca.pem  -ca-key=../ca-key.pem  -config=../ca-config.json  -profile=kubernetes etcd-csr.json | cfssljson -bare etcd
+$ cfssl gencert \
+        -ca=/etc/kubernetes/ca/ca.pem \
+        -ca-key=/etc/kubernetes/ca/ca-key.pem \
+        -config=/etc/kubernetes/ca/ca-config.json \
+        -profile=kubernetes etcd-csr.json | cfssljson -bare etcd
 #跟之前类似生成三个文件etcd.csr是个中间证书请求文件，我们最终要的是etcd-key.pem和etcd.pem
 $ ls
 etcd.csr  etcd-csr.json  etcd-key.pem  etcd.pem
