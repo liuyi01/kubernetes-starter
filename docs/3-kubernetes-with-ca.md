@@ -464,9 +464,9 @@ $ journalctl -f -u kube-proxy
 ```
 
 ## 12. 改造kube-dns
-kube-dns有些特别，因为它本身是运行在kubernetes集群中，以kubernetes应用的形式运行。所以它的认证授权方式跟之前的组件都不一样。它需要用到service account认证和RBAC授权。
-**service account认证：**
-每个service account都会自动生成自己的secret，用于包含一个ca，token和secret，用于跟api-server认证
+kube-dns有些特别，因为它本身是运行在kubernetes集群中，以kubernetes应用的形式运行。所以它的认证授权方式跟之前的组件都不一样。它需要用到service account认证和RBAC授权。  
+**service account认证：**  
+每个service account都会自动生成自己的secret，用于包含一个ca，token和secret，用于跟api-server认证  
 **RBAC授权：**  
 权限、角色和角色绑定都是kubernetes自动创建好的。我们只需要创建一个叫做kube-dns的 ServiceAccount即可，官方现有的配置已经把它包含进去了。
 
