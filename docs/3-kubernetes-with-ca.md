@@ -3,7 +3,6 @@
 ```bash
 #删除services
 $ kubectl delete services nginx-service
-$ kubectl delete service kube-dns -n kube-system
 
 #删除deployments
 $ kubectl delete deploy kubernetes-bootcamp
