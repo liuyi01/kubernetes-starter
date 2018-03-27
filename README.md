@@ -1,6 +1,6 @@
 # 综述
 
-  **必读：本项目+文档是专门针对慕课网的在线课程《Docker + Kubernetes微服务容器化实践》中的kubernetes实战部分使用的，单独使用可能会有部分内容缺失和不易理解的地方，敬请谅解！**
+  **必读：本项目+文档是专门针对慕课网的在线课程[《Docker + Kubernetes微服务容器化实践》][5]中的kubernetes实战部分使用的，单独使用可能会有部分内容缺失和不易理解的地方，敬请谅解！**
   
 ## [一、预先准备环境][1]
 ## [二、基础集群部署 - kubernetes-simple][2]
@@ -18,3 +18,4 @@
   [2]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/2-kubernetes-simple.md
   [3]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/3-kubernetes-with-ca.md
   [4]: https://github.com/liuyi01/kubernetes-starter/tree/master/docs/4-microservice-deploy.md
+  [5]: https://coding.imooc.com/class/198.html
