@@ -496,5 +496,5 @@ $ kubectl -n kube-system get pods
 
 [1]: https://www.zhihu.com/question/33645891/answer/57721969
 [2]: http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html
-[3]: https://www.视频制作中敬请期待.com
+[3]: https://coding.imooc.com/class/198.html
 
