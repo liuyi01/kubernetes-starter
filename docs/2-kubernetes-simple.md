@@ -314,7 +314,7 @@ ExecStart=/home/michael/bin/kube-proxy \\
 配置了kube-proxy如何访问api-server，内容与kubelet雷同，不再赘述。
 
 #### 9.4 操练service
-刚才我们在基础集群上演示了pod，deployments。下面就在刚才的基础上增加点service元素。具体内容见[Docker+k8s微服务容器化实践][1]。
+刚才我们在基础集群上演示了pod，deployments。下面就在刚才的基础上增加点service元素。具体内容见[《Docker+k8s微服务容器化实践》][1]。
 
 
 ## 10. 为集群增加dns功能 - kube-dns（app）
@@ -333,6 +333,6 @@ $ kubectl create -f target/services/kube-dns.yaml
 
 #### 10.4 通过dns访问服务
 这了主要演示增加kube-dns后，通过名字访问服务的原理和具体过程。演示启动dns服务和未启动dns服务的通过名字访问情况差别。
-具体内容请看[Docker+k8s微服务容器化实践][1]吧~
+具体内容请看[《Docker+k8s微服务容器化实践》][1]吧~
 
 [1]: https://coding.imooc.com/class/198.html
