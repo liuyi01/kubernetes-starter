@@ -276,7 +276,7 @@ calico作为kubernets的CNI插件的配置
 ## 8. 小试牛刀
 到这里最基础的kubernetes集群就可以工作了。下面我们就来试试看怎么去操作，控制它。
 我们从最简单的命令开始，尝试一下kubernetes官方的入门教学：playground的内容。了解如何创建pod，deployments，以及查看他们的信息，深入理解他们的关系。
-具体内容请看慕课网的视频吧：  [《微服务从开发到编排》][1]
+具体内容请看慕课网的视频吧：  [《Docker+k8s微服务容器化实践》][1]
 
 ## 9. 为集群增加service功能 - kube-proxy（工作节点）
 #### 9.1 简介
@@ -314,7 +314,7 @@ ExecStart=/home/michael/bin/kube-proxy \\
 配置了kube-proxy如何访问api-server，内容与kubelet雷同，不再赘述。
 
 #### 9.4 操练service
-刚才我们在基础集群上演示了pod，deployments。下面就在刚才的基础上增加点service元素。具体内容见[视频教程][1]。
+刚才我们在基础集群上演示了pod，deployments。下面就在刚才的基础上增加点service元素。具体内容见[Docker+k8s微服务容器化实践][1]。
 
 
 ## 10. 为集群增加dns功能 - kube-dns（app）
@@ -333,6 +333,6 @@ $ kubectl create -f target/services/kube-dns.yaml
 
 #### 10.4 通过dns访问服务
 这了主要演示增加kube-dns后，通过名字访问服务的原理和具体过程。演示启动dns服务和未启动dns服务的通过名字访问情况差别。
-具体内容请看[视频教程][1]吧~
+具体内容请看[Docker+k8s微服务容器化实践][1]吧~
 
-[1]: https://www.视频制作中敬请期待.com
+[1]: https://coding.imooc.com/class/198.html
