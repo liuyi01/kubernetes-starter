@@ -59,7 +59,7 @@ ExecStartPost=/sbin/iptables -I FORWARD -s 0.0.0.0/0 -j ACCEPT
 - 启动服务
 ```bash
 $ systemctl daemon-reload
-$ service docker start
+$ service docker restart
 ```
   
 
