@@ -21,7 +21,7 @@ ExecStart=/usr/bin/docker run --net=host --privileged --name=calico-node \
   -e FELIX_LOGSEVERITYSCREEN=info \
   -e FELIX_IPINIPMTU=1440 \
   -e FELIX_HEALTHENABLED=true \
-  -e IP= \
+  -e IP={{NODE_IP}} \
   -v /etc/kubernetes/ca:/etc/kubernetes/ca \
   -v /var/run/calico:/var/run/calico \
   -v /lib/modules:/lib/modules \
