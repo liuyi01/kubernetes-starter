@@ -275,7 +275,7 @@ etcd-0               Healthy   {"health": "true"}
 
 
 ## 9. 改造calico-node
-#### 9.1 准备证书
+#### 9.1 准备证书----- 在主节点上
 后续可以看到calico证书用在四个地方：
 * calico/node 这个docker 容器运行时访问 etcd 使用证书
 * cni 配置文件中，cni 插件需要访问 etcd 使用证书
@@ -309,6 +309,8 @@ $ vimdiff kubernetes-simple/all-node/kube-calico.service kubernetes-with-ca/all-
 /etc/kubernetes/ca/calico/calico.pem  
 /etc/kubernetes/ca/calico/calico-key.pem  
 由于calico服务是所有节点都需要启动的，大家需要把这几个文件拷贝到每台服务器上
+在主节点上执行：
+scp -r /etc/kubernetes/ca  root@其他节点ip:/etc/kubernetes/
 
 **更新calico服务**
 ```bash
