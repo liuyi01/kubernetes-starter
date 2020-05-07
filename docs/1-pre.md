@@ -4,9 +4,9 @@
 
 | 系统类型 | IP地址 | 节点角色 | CPU | Memory | Hostname |
 | :------: | :--------: | :-------: | :-----: | :---------: | :-----: |
-| ubuntu16.04 | 192.168.1.101 | worker |   1    | 2G | server01 |
-| ubuntu16.04 | 192.168.1.102 | master |   1    | 2G | server02 |
-| ubuntu16.04 | 192.168.1.103 | worker |   1    | 2G | server03 |
+| ubuntu16.04 | 192.168.1.101 | master1 |   1    | 2G | server01 |
+| ubuntu16.04 | 192.168.1.102 | worker1 |   1    | 2G | server02 |
+| ubuntu16.04 | 192.168.1.103 | worker2 |   1    | 2G | server03 |
 
 > 使用centos的同学也可以参考此文档，需要注意替换系统命令即可
 
@@ -33,6 +33,16 @@ $ apt-get install \
     software-properties-common
 $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 ```
+
+#### 2.3 添加docker的阿里云源
+```bash
+$ add-apt-repository \
+    "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu \
+    $(lsb_release -cs) \
+    stable"
+$ curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+```
+
 
 #### 2.4 安装docker-ce
 
@@ -90,9 +100,9 @@ $ sysctl -p /etc/sysctl.d/k8s.conf
 #配置host，使每个Node都可以通过名字解析到ip地址
 $ vi /etc/hosts
 #加入如下片段(ip地址和servername替换成自己的)
-192.168.1.101 server01
-192.168.1.102 server02
-192.168.1.103 server03
+192.168.1.101 master1
+192.168.1.102 worker1
+192.168.1.103 worker2
 ```
 
 ## 4. 准备二进制文件（所有节点）
@@ -109,6 +119,12 @@ kubernetes的安装有几种方式，不管是kube-admin还是社区贡献的部
 从上面的三种方式中其实使用镜像是比较优雅的方案，容器的好处自然不用多说。但从初学者的角度来说容器的方案会显得有些复杂，不那么纯粹，会有很多容器的配置文件以及关于类似二进制文件提供的服务如何在容器中提供的问题，容易跑偏。
 所以我们这里使用二进制的方式来部署。二进制文件已经这里备好，大家可以打包下载，把下载好的文件放到每个节点上，放在哪个目录随你喜欢，**放好后最好设置一下环境变量$PATH**，方便后面可以直接使用命令。(科学上网的同学也可以自己去官网找找)  
 ####[下载地址（kubernetes 1.9.0版本）][2] 
+$ mkdir -p /etc/kubernetes
+$ cd ~
+$ mv ./kubernetes-bins/* /etc/kubernetes/bin/
+# 添加到path
+$ sudo vim /etc/environment
+# 添加 ":/etc/kubernetes/bin" 到PATH变量，然后重启
 
 ## 5. 准备配置文件（所有节点）
 上一步我们下载了kubernetes各个组件的二进制文件，这些可执行文件的运行也是需要添加很多参数的，包括有的还会依赖一些配置文件。现在我们就把运行它们需要的参数和配置文件都准备好。
